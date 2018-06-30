@@ -12,15 +12,18 @@ import java.util.Arrays;
 @Component
 public class DBInitialization implements CommandLineRunner {
 
-	@Autowired
 	private AccountService accountService;
 
-    @Override
+	@Autowired
+	public DBInitialization(AccountService accountService) {
+		this.accountService = accountService;
+	}
+
+	@Override
     public void run(String... args) throws Exception {
-		Arrays.asList(
-				"user,admin,robert,ana".split(".")).forEach(
+		System.out.println("inside of run");
+		Arrays.asList("user,admin,robert,ana".split(",")).forEach(
 						username -> {
-							System.out.println("##############   " + username + " ############");
 							Account acct = new Account();
 							acct.setUsername(username);
 							acct.setPassword("geekbeta");
@@ -29,8 +32,12 @@ public class DBInitialization implements CommandLineRunner {
 							acct.grantAuthority(Role.ROLE_USER);
 							if (username.equals("admin"))
 								acct.grantAuthority(Role.ROLE_ADMIN);
+
+							System.out.println("##############   " + acct + " ############");
 							accountService.registerUser(acct);
 						}
 		);
+
+		System.out.println("after DB init");
     }
 }

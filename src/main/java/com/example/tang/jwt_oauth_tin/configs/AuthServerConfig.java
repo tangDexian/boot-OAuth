@@ -36,10 +36,6 @@ public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
     @Autowired
     private AuthenticationManager authenticationManager;
 
-    @Bean
-    public UserDetailsService userDetailsService() {
-        return new AccountService();
-    }
 
     //////////////////////////////////////////////////////////////////
     // setting up JWT token store

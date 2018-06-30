@@ -6,6 +6,7 @@ import com.example.tang.jwt_oauth_tin.repositories.AccountRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -17,15 +18,19 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 
 @Service
+@Primary
 public class AccountService implements UserDetailsService {
 
     private final Logger logger = LoggerFactory.getLogger(AccountService.class);
 
-    @Autowired
     private AccountRepository accountRepository;
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
-    private PasswordEncoder passwordEncoder;
+    public AccountService(AccountRepository accountRepository, PasswordEncoder passwordEncoder) {
+        this.accountRepository = accountRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -46,7 +51,7 @@ public class AccountService implements UserDetailsService {
     }
 
     public Account registerUser(Account account) {
-        System.out.println(account.getUsername());
+        System.out.println("in register " + account);
         account.setPassword(passwordEncoder.encode(account.getPassword()));
         account.grantAuthority(Role.ROLE_USER);
         return accountRepository.save(account);
