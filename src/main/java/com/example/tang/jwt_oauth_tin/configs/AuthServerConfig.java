@@ -1,5 +1,7 @@
 package com.example.tang.jwt_oauth_tin.configs;
 
+import com.example.tang.jwt_oauth_tin.models.Role;
+import com.example.tang.jwt_oauth_tin.services.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -7,6 +9,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
@@ -31,6 +35,11 @@ public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
 
     @Autowired
     private AuthenticationManager authenticationManager;
+
+    @Bean
+    public UserDetailsService userDetailsService() {
+        return new AccountService();
+    }
 
     //////////////////////////////////////////////////////////////////
     // setting up JWT token store
@@ -78,14 +87,27 @@ public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         clients
                 .inMemory()
+
+                // auth server client 1
                 .withClient("trusted-app")
                     .authorizedGrantTypes("client_credentials", "password", "refresh_token")
-                    .authorities("ROLE_TRUSTED_CLIENT")
+                    .authorities(Role.ROLE_TRUSTED_CLIENT.toString())
                     .scopes("read", "write")
                     .resourceIds(resourceId)
                 .accessTokenValiditySeconds(accessTokenValiditySeconds)
                 .refreshTokenValiditySeconds(refreshTokenValiditySeconds)
-                .secret("secret");
+                .secret("secret")
+
+                .and()
+                // auth server client 2
+                .withClient("register-app")
+                    .authorizedGrantTypes("client_credentials")
+                    .authorities(Role.ROLE_REGISTER.toString())
+                    .scopes("register")
+                    .accessTokenValiditySeconds(10)
+                    .refreshTokenValiditySeconds(10)
+                    .resourceIds(resourceId)
+                    .scopes("secret");
 
         /**
          *  withClient and secret actually sets the username & pw for the http auth request
