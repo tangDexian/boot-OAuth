@@ -1,5 +1,7 @@
 package com.example.tang.jwt_oauth_tin.controllers;
 
+import com.example.tang.jwt_oauth_tin.models.Account;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,6 +14,10 @@ public class GeneralController {
 
     @RequestMapping("/")
     public String home() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        System.out.println(auth.getPrincipal() instanceof Account);
+        System.out.println(((Account)auth.getPrincipal()).toString());
+
         return "Hello World";
     }
 
