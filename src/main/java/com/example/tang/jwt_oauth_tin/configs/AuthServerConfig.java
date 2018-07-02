@@ -27,7 +27,7 @@ import org.springframework.security.oauth2.provider.token.store.KeyStoreKeyFacto
 @EnableAuthorizationServer
 public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
 
-    private int accessTokenValiditySeconds = 10000;
+    private int accessTokenValiditySeconds = 10;
     private int refreshTokenValiditySeconds = 30000;
 
     @Value("${security.oauth2.resource.id}")
@@ -47,6 +47,7 @@ public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
     @Bean
     @Primary
     public DefaultTokenServices tokenServices() {
+        // to enable token revocation, use TokenBlackListService
         DefaultTokenServices defaultTokenServices = new DefaultTokenServices();
         defaultTokenServices.setTokenStore(tokenStore());
         defaultTokenServices.setSupportRefreshToken(true);
@@ -56,6 +57,7 @@ public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
 
     @Bean
     public JwtAccessTokenConverter accessTokenConverter() {
+        // to add custom info in JWT
         CustomTokenConverter converter = new CustomTokenConverter();
 
         KeyStoreKeyFactory keyStoreKeyFactory = new KeyStoreKeyFactory(

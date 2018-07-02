@@ -58,9 +58,10 @@ public class AccountService implements UserDetailsService {
     }
 
     @Transactional // two DB operation, transactional is needed
-    public void removeAuthenticatedAccount() throws UsernameNotFoundException {
+    public boolean removeAuthenticatedAccount() throws UsernameNotFoundException {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         Account account = findAccountByUsername(username);
-        accountRepository.deleteAccountById(account.getId());
+        int del = accountRepository.deleteAccountById(account.getId());
+        return del > 0;
     }
 }

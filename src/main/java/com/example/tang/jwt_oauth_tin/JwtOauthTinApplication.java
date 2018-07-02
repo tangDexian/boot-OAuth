@@ -8,11 +8,13 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.Arrays;
 
 @SpringBootApplication
+@EnableAsync
 public class JwtOauthTinApplication {
 
 	@Bean
@@ -27,23 +29,4 @@ public class JwtOauthTinApplication {
 		SpringApplication.run(JwtOauthTinApplication.class, args);
 	}
 
-//	@Bean
-//	CommandLineRunner init(AccountService accountService) {
-//
-//		return (evt) -> Arrays.asList(
-//				"user,admin,robert,ana".split(".")).forEach(
-//						username -> {
-//							System.out.println("##############   " + username + " ############");
-//							Account acct = new Account();
-//							acct.setUsername(username);
-//							acct.setPassword("geekbeta");
-//							acct.setFirstName(username);
-//							acct.setLastName("lastName");
-//							acct.grantAuthority(Role.ROLE_USER);
-//							if (username.equals("admin"))
-//								acct.grantAuthority(Role.ROLE_ADMIN);
-//							accountService.registerUser(acct);
-//						}
-//		);
-//	}
 }
