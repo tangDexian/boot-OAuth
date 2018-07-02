@@ -19,6 +19,22 @@ import java.util.List;
 
 @Entity
 public class Account implements UserDetails {
+    @Override
+    public String toString() {
+        return "Account{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", roles=" + roles +
+                ", accountNonExpired=" + accountNonExpired +
+                ", accountNonLocked=" + accountNonLocked +
+                ", credentialsNonExpired=" + credentialsNonExpired +
+                ", enabled=" + enabled +
+                '}';
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -140,6 +156,4 @@ public class Account implements UserDetails {
     public boolean isEnabled() {
         return enabled;
     }
-
-
 }

@@ -56,7 +56,7 @@ public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
 
     @Bean
     public JwtAccessTokenConverter accessTokenConverter() {
-        JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
+        CustomTokenConverter converter = new CustomTokenConverter();
 
         KeyStoreKeyFactory keyStoreKeyFactory = new KeyStoreKeyFactory(
                 new ClassPathResource("mykeys.jks"),
